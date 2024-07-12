@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Header from './components/Header';
+import Main from './components/Main';
+import Footer from './components/Footer';
+import './index.css';
 
-function App() {
+const App = () => {
+  const [todos, setTodos] = useState([
+    { text: 'Learn JavaScript', completed: true },
+    { text: 'Learn React', completed: false },
+    { text: 'Have a life!', completed: false }
+  ]);
+
+  const addTodo = (text) => {
+    setTodos([...todos, { text, completed: false }]);
+  };
+
+  const toggleTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].completed = !newTodos[index].completed;
+    setTodos(newTodos);
+  };
+
+  const deleteTodo = (index) => {
+    const newTodos = todos.filter((_, i) => i !== index);
+    setTodos(newTodos);
+  };
+
+  const clearCompleted = () => {
+    const newTodos = todos.filter(todo => !todo.completed);
+    setTodos(newTodos);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section className="todoapp">
+      <Header addTodo={addTodo} />
+      <Main todos={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
+      <Footer todos={todos} clearCompleted={clearCompleted} />
+    </section>
   );
-}
+};
 
 export default App;
